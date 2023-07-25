@@ -1600,15 +1600,17 @@ export function updateExperimentApiPayloadToInterface(
               ),
           })),
         }
-      : {}),
-    dateUpdated: new Date(),
-  };
-}
+    let days = metricAnalysisDays;
+    if (days < 1) {
+      days = userDefinedLookbackRange || DEFAULT_METRIC_ANALYSIS_DAYS;
+    }
 
-export async function getRegressionAdjustmentInfo(
-  experiment: ExperimentInterface,
-  organization: OrganizationInterface
-): Promise<{
+    const from = new Date();
+    from.setDate(from.getDate() - days);
+    const to = new Date();
+    if (populateQueryCondition) {
+      to.setDate(to.getDate() + 1);
+    }
   regressionAdjustmentEnabled: boolean;
   metricRegressionAdjustmentStatuses: MetricRegressionAdjustmentStatus[];
 }> {
