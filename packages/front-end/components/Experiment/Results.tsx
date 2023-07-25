@@ -138,6 +138,8 @@ const Results: FC<{
         }
         metricRegressionAdjustmentStatuses={metricRegressionAdjustmentStatuses}
         onRegressionAdjustmentChange={onRegressionAdjustmentChange}
+        lookbackRange={lookbackRange}
+        populateQueryCondition={populateQueryCondition}
       />
       {experiment.metrics.length === 0 && (
         <div className="alert alert-info m-3">
