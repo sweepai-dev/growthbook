@@ -208,6 +208,8 @@ const Results: FC<{
               body: JSON.stringify({
                 phase,
                 dimension,
+                lookbackRange: 30, // hardcoding lookback range to 30 days for now
+                runQuery: true, // hardcoding runQuery flag to true for now
               }),
             });
             trackSnapshot(
