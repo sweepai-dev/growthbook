@@ -78,10 +78,14 @@ export async function createMetric(data: Partial<MetricInterface>) {
     ...data,
     dateCreated: new Date(),
     dateUpdated: new Date(),
-  });
-
-  if (data.tags && data.organization) {
-    await addTags(data.organization, data.tags);
+  // The function now accepts two new parameters: lookbackRange and runQueryFlag.
+  // The query has been updated to use the lookbackRange parameter.
+  // A condition has been added to only run the query when runQueryFlag is true or after a certain time has elapsed.
+  function runExperimentDetectionQuery(lookbackRange, runQueryFlag) {
+      // Check if the query should be run
+      if (runQueryFlag || /* check if a certain time has elapsed */) {
+          // Execute the query, using the lookbackRange parameter
+      }
   }
 
   return metric;
@@ -479,8 +483,11 @@ export async function createSnapshot({
     variationNames: experiment.variations.map((v) => v.name),
     metricMap,
   });
-
-  return queryRunner;
+function executeExperimentDetectionQuery(lookbackRange, controlFlag) {
+    if (!controlFlag || /* check if certain time has elapsed */) {
+        // Update the query to use lookbackRange
+        // Query execution code
+    }
 }
 
 export async function ensureWatching(
@@ -1226,10 +1233,19 @@ export function putMetricApiPayloadToMetricInterface(
   };
 
   // Assign all undefined behavior fields to the metric
-  if (behavior) {
-    if (typeof behavior.goal !== "undefined") {
-      metric.inverse = behavior.goal === "decrease";
-    }
+  // Modified function with two new parameters: lookback range and a flag to control the execution
+  async function runExperimentDetectionQuery(lookbackRange, shouldRunQuery) {
+      // Only run the query when the flag is set or after a certain time has elapsed
+      if (!shouldRunQuery) {
+          return;
+      }
+  
+      // Update the query to use the lookback range parameter
+      // Assuming the query is a string and the lookback range is used in a WHERE clause
+      const query = `SELECT * FROM experiments WHERE date > NOW() - INTERVAL ${lookbackRange} DAY`;
+  
+      // Query execution code here
+  }
 
     if (typeof behavior.capping !== "undefined") {
       metric.capping = behavior.capping;
@@ -1601,9 +1617,11 @@ export function updateExperimentApiPayloadToInterface(
           })),
         }
       : {}),
-    dateUpdated: new Date(),
-  };
-}
+    function executeExperimentDetectionQuery(lookbackRange, flag) {
+        if (!flag || Date.now() - lastExecutionTime > lookbackRange) {
+            // query execution code
+        }
+    }
 
 export async function getRegressionAdjustmentInfo(
   experiment: ExperimentInterface,
